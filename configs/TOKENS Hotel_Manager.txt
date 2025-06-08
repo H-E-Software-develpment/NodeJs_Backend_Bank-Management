@@ -1,0 +1,35 @@
+TOKENS Hotel_Manager:
+-----------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------
+USER:
+---------------
+{
+    "email": "aescobar@gmail.com",
+    "password": "UserPass@123"
+}
+------------------------------------
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGI3YjQzOWRlOTlhNjk5Yjc2OGQiLCJpYXQiOjE3NDg0ODExNTUsImV4cCI6MTc0ODk5OTU1NX0.zKqhAIZQDqBqU7CYfuNADjOSArlIYDHl8R6Z6eJIMno
+-----------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------
+PLATFORM_ADMIN:
+---------------
+{
+  "email": "braulio@gmail.com",
+  "password": "AdminPass@123"
+}
+------------------------------------
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGNiOGQ0YTdkYzIyMDczNmViZDUiLCJpYXQiOjE3NDg0ODEwODQsImV4cCI6MTc0ODk5OTQ4NH0.BjF3tf1rd2t42jwmBhRyT0csi9pUmDM1nmJXVywwomY"
+-----------------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------
+HOTEL_ADMIN:
+---------------
+{
+  "email": "josue@gmail.com",
+  "password": "AdminPass@123"
+}
+------------------------------------
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGNmMWQ4ZTRhODI1NGM1NDBlMDYiLCJpYXQiOjE3NDg0ODExMjUsImV4cCI6MTc0ODk5OTUyNX0.VoaMUaV2kSyK5_3IKx5zM1fNSLE0dERjFuq8Lq2yInA
+-----------------------------------------------------------------------------------
