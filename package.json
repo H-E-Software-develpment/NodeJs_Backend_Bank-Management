@@ -4,16 +4,19 @@
   "description": "El objetivo principal es crear una aplicación web que funcione como sistema bancario completo que permita la gestión segura \r y dinámica de usuarios, cuentas, movimientos financieros, y servicios exclusivos.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/H-E-Software-develpment/NodeJs_Backend_Bank-Management.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anthony Josue Escobar Ponce",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/H-E-Software-develpment/NodeJs_Backend_Bank-Management/issues"
   },

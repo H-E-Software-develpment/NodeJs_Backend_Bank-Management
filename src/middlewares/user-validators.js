@@ -17,7 +17,7 @@ export const createUserValidator = [
     hasRoles("ADMINISTRATOR", "WORKER"),
     body("name").notEmpty().withMessage("Complete name is required").isString().withMessage("Your name must be a valid name").isLength({ max: 60 }).withMessage("Name cannot exceed 60 characters"),
     body("username").notEmpty().withMessage("Username is required").custom(findUsername),
-    body("dpi").notEmpty().withMessage("DPI is required for identification").isString().withMessage("DPI must be a valid string").isLength({ max: 13 }).withMessage("DPI must be 13 characters").custom(dpiDuplicated),
+    body("dpi").notEmpty().withMessage("DPI is required for identification").isString().withMessage("DPI must be a valid string").isLength({ max: 13 }).withMessage("DPI must be 13 characters"),
     body("address").notEmpty().withMessage("Address is required"),
     body("phone").notEmpty().withMessage("Phone number is required").isLength({ max: 8 }).withMessage("Phone number must be 8 characters"),
     body("email").notEmpty().withMessage("Email is required").isEmail().withMessage("Email is invalid").custom(emailDuplicated),
