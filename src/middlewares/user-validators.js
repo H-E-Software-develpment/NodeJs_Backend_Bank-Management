@@ -12,7 +12,7 @@ export const loginValidator = [
     handleErrors
 ];
 
-export const createUserValidator = [
+/*export const createUserValidator = [
     validateJWT,
     hasRoles("ADMINISTRATOR", "WORKER"),
     body("name").notEmpty().withMessage("Complete name is required").isString().withMessage("Your name must be a valid name").isLength({ max: 60 }).withMessage("Name cannot exceed 60 characters"),
@@ -27,4 +27,4 @@ export const createUserValidator = [
     body("income").notEmpty().withMessage("Income must be specified"),
     validateFields,
     handleErrors
-];
+];*/

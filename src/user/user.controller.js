@@ -1,16 +1,14 @@
 import User from "./user.model.js";
 import { hash, verify } from "argon2";
 
-// ADMINISTRADORES Y TRABAJADORES
-export const createUser = async (req, res) => {
+
+// ---------- ADMINISTRATOR ROLE ---------- //
+// (CAN ONLY SELECT EITHER ADMINISTRATOR OR WORKER ROLE ALONE )
+//THIS IS only TO CREATE WORKER OR ADMINISTRATOR ACCOUNTS, NO CLIENTS
+export const createUserForAdmin = async (req, res) => {
     try {
-        const account = req.userJwt;
+        const admin = req.userJwt;
         const data = req.body;
-
-        if (account.role !== "ADMINISTRATOR") {
-            data.role = "CLIENT";
-        }
-
         const encryptedPassword = await hash(data.password);
 
         data.password = encryptedPassword;
@@ -18,25 +16,192 @@ export const createUser = async (req, res) => {
         const user = await User.create(data);
 
         return res.status(201).json({
-            message: "User registered succesfully",
+            message: "User created succesfully",
             user
         });
     } catch (err) {
         return res.status(500).json({
-            message: "User registration failed,check the information",
+            message: "User creation failed,check the information",
+            error: err.message
+        });
+    }
+};
+// Show all active accounts existent (shows all roles)
+export const getUsersForAdmin = async (req, res) => {
+    try {
+        const admin = req.userJwt;
+        const { limit = 10, from = 0 } = req.query;
+        const query = { status: true };
+
+        const [total, user] = await Promise.all([
+            User.countDocuments(query),
+            User.find(query)
+                .skip(Number(from))
+                .limit(Number(limit))
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            message: "users list got successfully",
+            total,
+            user
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get users",
+            error: err.message
+        });
+    }
+};
+
+// ---------- ADMINISTRATOR ROLE AND WORKER ROLE ---------- //
+//Filtered search to find users or getUsers Clients For role workers only
+// role as filter has the role employees and administrator not available for workers only administrators
+export const findUsers = async (req, res) => {
+    try {
+        const account = req.userJwt;
+        const { limit = 10, from = 0 } = req.query;
+        const query = { status: true };
+        const { uid, name, role } = req.body;
+
+        let filterParameter = { ...query };
+
+        if (uid) filterParameter._id = uid;
+        if (name) filterParameter.name = { $regex: name, $options: "i" };
+
+        if (account.role === 'WORKER') {
+            filterParameter.role = 'CLIENT';
+        } else {
+            if (role) filterParameter.role = role;
+        }
+        
+        let user = await User.find(filterParameter).skip(Number(from)).limit(Number(limit));
+
+        const total = await User.countDocuments(filterParameter);
+
+        return res.status(200).json({
+            success: true,
+            message: "Users found successfully",
+            total,
+            user
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to find the Users you sought",
+            error: err.message,
+        });
+    }
+};
+
+// FOR WORKERS IT ONLY SHOWS THEM CLIENT ACCOUNTS TO EDIT, BUT FOR ADMINS IT SHOWS ALL ACCOUNTS EXCEPT OTHER ADMINISTRATORS
+export const editUser = async (req, res) => {
+    try {
+        const account = req.userJwt;
+        const { uid } = req.params;
+        const { name, address, job, income } = req.body;
+
+        const found = await User.findById(uid);
+
+        if (!found || !uid) {
+            return res.status(400).json({
+                success: false,
+                message: "user not found"
+            });
+        };
+
+        if (account.role === 'WORKER' && found.role !== 'CLIENT') {
+            return res.status(403).json({
+                success: false,
+                message: "Not allowed to edit this account"
+            });
+        }
+
+        if (account.role === 'ADMIN' && found.role === 'ADMIN' && account.uid !== found._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "Admins are not allowed to edit other Admins"
+            });
+        }
+
+        const newData = {
+            name: name || found.name,
+            address: address || found.address,
+            job: job || found.job,
+            income: income || found.income
+        };
+
+        const user = await User.findByIdAndUpdate(uid, newData, { new: true });
+
+        res.status(200).json({
+            success: true,
+            msg: 'Profile changes updated succesfully',
+            user
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            msg: 'failed to update profile changes',
+            error: err.message
+        });
+    }
+};
+
+//to delete an account for workers only clients and for admins all except other admins
+export const deleteUser = async (req, res) => {
+    try {
+        const account = req.userJwt;
+        const { uid } = req.params;
+
+        const found = await User.findById(uid);
+
+         if (!found || !uid) {
+            return res.status(400).json({
+                success: false,
+                message: "user not found"
+            });
+        };
+
+        if (account.role === 'WORKER' && found.role !== 'CLIENT') {
+            return res.status(403).json({
+                success: false,
+                message: "Not allowed to delete this account"
+            });
+        }
+
+        if (account.role === 'ADMIN' && found.role === 'ADMIN' && account.uid !== found._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "Admins are not allowed to delete other Admins"
+            });
+        }
+
+        await User.findByIdAndUpdate(uid, { status: false, name: `deleted: ${found.name}` }, { new: true });
+
+        return res.status(200).json({
+            success: true,
+            message: "Account deleted successfully "
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "failed to delete account",
             error: err.message
         });
     }
 };
 
 
-//todos - general
-export const findUser = async (req, res) => {
-    try {
-        const account = req.userJwt;
-        const { uid } = req.params;
 
-        const user = await User.findById(uid);
+// ---------- CLIENT OR ALL ROLES ---------- //
+//Shows the profile of the user logged in
+export const showProfile = async (req, res) => {
+    try {
+        const find = req.userJwt.uid;
+        const user = await User.findById(find);
 
         if (!user || user.status === false) {
             return res.status(400).json({
@@ -59,47 +224,13 @@ export const findUser = async (req, res) => {
     }
 };
 
-export const findUserForAdmin = async (req, res) => {
+//edits the profile of the user logged in
+export const editUserProfile= async (req, res) => {
     try {
-        const account = req.userJwt;
-        const { limit = 10, from = 0 } = req.query;
-        const query = { status: true };
-        const { uid, name, email, role } = req.body;
+        const account = req.userJwt.uid;
+        const { name, address, job, income } = req.body;
 
-        let filterParameter = { ...query };
-
-        if (uid) filterParameter._id = uid;
-        if (name) filterParameter.name = { $regex: name, $options: "i" };
-        if (email) filterParameter.email = email;
-        if (role) filterParameter.role = role;
-
-        let user = await User.find(filterParameter).skip(Number(from)).limit(Number(limit));
-
-        const total = await User.countDocuments(filterParameter);
-
-        return res.status(200).json({
-            success: true,
-            message: "Users found successfully",
-            total,
-            user
-        });
-
-    } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "Failed to find the Users you sought",
-            error: err.message,
-        });
-    }
-};
-
-export const editUser = async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const newData = req.body;
-        const account = req.userJwt;
-
-        const found = await User.findById(uid);
+        const found = await User.findById(account);
 
         if (!found) {
             return res.status(400).json({
@@ -107,23 +238,14 @@ export const editUser = async (req, res) => {
                 message: "user not found"
             });
         };
+        const newData = {
+            name: name || found.name,
+            address: address || found.address,
+            job: job || found.job,
+            income: income || found.income
+        };
 
-        if (account.role !== "PLATFORM_ADMIN" && account.role !== "HOTEL_ADMIN") {
-            if (account._id.toString() !== uid) {
-                return res.status(401).json({
-                    success: false,
-                    message: "not allowed / user not found"
-                });
-            }
-        }
-        if (account.role === "HOTEL_ADMIN" && found.role === "PLATFORM_ADMIN") {
-            return res.status(401).json({
-                success: false,
-                message: "not allowed - user not found"
-            });
-        }
-
-        const user = await User.findByIdAndUpdate(uid, newData, { new: true });
+        const user = await User.findByIdAndUpdate(account, newData, { new: true });
 
         res.status(200).json({
             success: true,
@@ -133,58 +255,14 @@ export const editUser = async (req, res) => {
     } catch (err) {
         res.status(500).json({
             success: false,
-            msg: 'failed to update profile changes for the employee',
+            msg: 'failed to update profile changes',
             error: err.message
         });
     }
 };
 
-export const deleteUser = async (req, res) => {
-    try {
-        const account = req.userJwt;
-        const { uid } = req.params;
-
-        const found = await User.findById(uid);
-        if (!found) {
-            return res.status(400).json({
-                success: false,
-                message: "User not found"
-            });
-        };
-
-        if (account.role !== "PLATFORM_ADMIN" && account.role !== "HOTEL_ADMIN") {
-            if (account._id.toString() !== uid) {
-                return res.status(401).json({
-                    success: false,
-                    message: "not allowed / user not found"
-                });
-            }
-        }
-
-        if (account.role === "HOTEL_ADMIN" && found.role === "PLATFORM_ADMIN") {
-            return res.status(401).json({
-                success: false,
-                message: "not allowed - user not found"
-            });
-        }
-
-        await User.findByIdAndUpdate(uid, { status: false, name: `deleted: ${found.name}` }, { new: true });
-
-        return res.status(200).json({
-            success: true,
-            message: "Account deleted successfully "
-        });
-    } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "failed to delete account",
-            error: err.message
-        });
-    }
-};
-
-//solo usuarios
-export const changePassword = async (req, res) => {
+// change password for user logged in
+export const changeUserPassword = async (req, res) => {
     try {
         const { uid } = req.params;
         const { password, confirmation } = req.body;
@@ -226,67 +304,6 @@ export const changePassword = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to update password",
-            error: err.message
-        });
-    }
-};
-
-//solo administradores
-
-export const getUsers = async (req, res) => {
-    try {
-        const account = req.userJwt;
-        const { limit = 10, from = 0 } = req.query;
-        const query = { status: true };
-
-        const [total, user] = await Promise.all([
-            User.countDocuments(query),
-            User.find(query)
-                .skip(Number(from))
-                .limit(Number(limit))
-        ]);
-
-        return res.status(200).json({
-            success: true,
-            message: "users list got successfully",
-            total,
-            user
-        });
-
-    } catch (err) {
-        return res.status(500).json({
-            success: false,
-            message: "Failed to get users",
-            error: err.message
-        });
-    }
-};
-
-export const changeRole = async (req, res) => {
-    try {
-        const { uid } = req.params;
-        const { role } = req.body;
-
-        const found = await User.findById(uid);
-
-        if (!found) {
-            return res.status(400).json({
-                success: false,
-                message: "user not found"
-            });
-        };
-
-        const user = await User.findByIdAndUpdate(uid, { role: role }, { new: true });
-
-        res.status(200).json({
-            success: true,
-            msg: 'Profile role updated succesfully',
-            user
-        });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            msg: 'failed to update profile changes for this account',
             error: err.message
         });
     }

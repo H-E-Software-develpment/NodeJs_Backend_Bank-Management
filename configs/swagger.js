@@ -5,7 +5,7 @@ const options = {
     swaggerDefinition: {
         openapi: "3.0.0",
         info: {
-            title: "Hotel Manager - API Web",
+            title: "Bank Manager API Web",
             version: "1.0.0",
             description:
                 "una aplicación web que funcione como una plataforma centralizada para la gestión hotelera. Esta aplicación deberá ofrecer funcionalidades completas para la gestión de hotel es, habitaciones y eventos asociados.",
@@ -16,7 +16,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://127.0.0.1:3001/hotelManager/v1",
+                url: "http://127.0.0.1:3001/bankManagement/v1",
             },
         ],
         components: {
@@ -31,12 +31,7 @@ const options = {
     },
     apis: [
         "./src/auth/auth.routes.js", 
-        "./src/user/user.routes.js",
-        "./src/hotel/hotel.routes.js",
-        "./src/room/room.routes.js",
-        "./src/event/event.routes.js",
-        "./src/reservation/reservation.routes.js",
-        "./src/report/report.routes.js"
+        "./src/user/user.routes.js"
     ],
 };
 

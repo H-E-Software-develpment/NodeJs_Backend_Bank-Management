@@ -8,6 +8,7 @@ import { hash } from "argon2";
 import { dbConnection } from './mongo.js';
 import User from "../src/user/user.model.js";
 import authRoutes from "../src/auth/auth.routes.js";
+import userRoutes from "../src/user/user.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 
 class ExpressServer {
@@ -67,6 +68,7 @@ class ExpressServer {
     routes() {
         this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
         this.app.use("/hotelManager/v1/auth", authRoutes);
+        this.app.use("/hotelManager/v1/user", userRoutes);
     }
 
     listen() {

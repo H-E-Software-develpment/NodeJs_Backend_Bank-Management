@@ -15,7 +15,8 @@ const userSchema = Schema({
         type: String,
         required: [true, "DPI is required for identification"],
         unique: true,
-        maxLength: [13, "DPI must be 13 characters"]
+        maxLength: [13, "DPI must be 13 characters"],
+        unique: true
     },
     address: {
         type: String,
@@ -45,9 +46,9 @@ const userSchema = Schema({
         required: [true, "Job information is needed"]
     },
     income: {
-        type: String,
+        type: Number,
         required: [true, "Income must be specified"],
-        match: [/^(1000|[1-9][0-9]{3,})$/, "Income must be at least 1000"]
+        min: [100, "Income must be at least 100"]
     },
     favorites: [{
         account: {
