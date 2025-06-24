@@ -1,34 +1,34 @@
-TOKENS Hotel_Manager:
+TOKENS Bank Management:
 -----------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------------------
-USER:
+CLIENT ROLE:
 ---------------
 {
-    "email": "aescobar@gmail.com",
-    "password": "UserPass@123"
+    "username": "CLIENTB",
+    "password": "CLIENTB"
 }
 ------------------------------------
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGI3YjQzOWRlOTlhNjk5Yjc2OGQiLCJpYXQiOjE3NDg0ODExNTUsImV4cCI6MTc0ODk5OTU1NX0.zKqhAIZQDqBqU7CYfuNADjOSArlIYDHl8R6Z6eJIMno
 -----------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------------------
-PLATFORM_ADMIN:
+ADMINISTRATOR ROLE:
 ---------------
 {
-  "email": "braulio@gmail.com",
-  "password": "AdminPass@123"
+    "username": "ADMINB",
+    "password": "ADMINB"
 }
 ------------------------------------
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGNiOGQ0YTdkYzIyMDczNmViZDUiLCJpYXQiOjE3NDg0ODEwODQsImV4cCI6MTc0ODk5OTQ4NH0.BjF3tf1rd2t42jwmBhRyT0csi9pUmDM1nmJXVywwomY"
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODVhM2JkMzE2ZjU4Y2ViNDk0OWEwNzEiLCJpYXQiOjE3NTA3NDQzMTgsImV4cCI6MTc1MTI2MjcxOH0.c03QUu6zodEj2GgGcwyF2VI7j13W5h0DLLSuxeyVuZQ
 -----------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
 -----------------------------------------------------------------------------------
-HOTEL_ADMIN:
+WORKER ROLE:
 ---------------
 {
-  "email": "josue@gmail.com",
-  "password": "AdminPass@123"
+    "username": "WORKERB",
+    "password": "WORKERB"
 }
 ------------------------------------
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2ODJiNGNmMWQ4ZTRhODI1NGM1NDBlMDYiLCJpYXQiOjE3NDg0ODExMjUsImV4cCI6MTc0ODk5OTUyNX0.VoaMUaV2kSyK5_3IKx5zM1fNSLE0dERjFuq8Lq2yInA

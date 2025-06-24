@@ -7,7 +7,7 @@ import { hash, verify } from "argon2";
 //THIS IS only TO CREATE WORKER OR ADMINISTRATOR ACCOUNTS, NO CLIENTS
 export const createUserForAdmin = async (req, res) => {
     try {
-        const admin = req.userJwt;
+        const account = req.userJwt;
         const data = req.body;
         const encryptedPassword = await hash(data.password);
 
@@ -64,11 +64,12 @@ export const findUsers = async (req, res) => {
         const account = req.userJwt;
         const { limit = 10, from = 0 } = req.query;
         const query = { status: true };
-        const { uid, name, role } = req.body;
+        const { uid,username, name, role } = req.body;
 
         let filterParameter = { ...query };
 
         if (uid) filterParameter._id = uid;
+        if (username) filterParameter.username = username;
         if (name) filterParameter.name = { $regex: name, $options: "i" };
 
         if (account.role === 'WORKER') {
@@ -193,8 +194,6 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
-
-
 
 // ---------- CLIENT OR ALL ROLES ---------- //
 //Shows the profile of the user logged in
