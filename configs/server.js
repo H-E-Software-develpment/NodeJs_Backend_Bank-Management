@@ -67,8 +67,8 @@ class ExpressServer {
 
     routes() {
         this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-        this.app.use("/hotelManager/v1/auth", authRoutes);
-        this.app.use("/hotelManager/v1/user", userRoutes);
+        this.app.use("/bankManagement/v1/auth", authRoutes);
+        this.app.use("/bankManagement/v1/user", userRoutes);
     }
 
     listen() {
