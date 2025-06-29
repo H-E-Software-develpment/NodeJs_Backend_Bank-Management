@@ -64,7 +64,7 @@ export const findUsers = async (req, res) => {
         const account = req.userJwt;
         const { limit = 10, from = 0 } = req.query;
         const query = { status: true };
-        const { uid,username, name, role } = req.body;
+        const { uid, username, name, role } = req.body;
 
         let filterParameter = { ...query };
 
@@ -77,8 +77,15 @@ export const findUsers = async (req, res) => {
         } else {
             if (role) filterParameter.role = role;
         }
-        
+
         let user = await User.find(filterParameter).skip(Number(from)).limit(Number(limit));
+
+        if (!user || user.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Failed to find the Users you sought"
+            });
+        }
 
         const total = await User.countDocuments(filterParameter);
 
@@ -93,7 +100,7 @@ export const findUsers = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to find the Users you sought",
-            error: err.message,
+            error: err.message
         });
     }
 };
@@ -107,7 +114,7 @@ export const editUser = async (req, res) => {
 
         const found = await User.findById(uid);
 
-        if (!found || !uid) {
+        if (!found || !uid || found.status === false) {
             return res.status(400).json({
                 success: false,
                 message: "user not found"
@@ -121,7 +128,7 @@ export const editUser = async (req, res) => {
             });
         }
 
-        if (account.role === 'ADMIN' && found.role === 'ADMIN' && account.uid !== found._id.toString()) {
+        if (account.role === 'ADMINISTRATOR' && found.role === 'ADMINISTRATOR' && account.uid !== found._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "Admins are not allowed to edit other Admins"
@@ -159,7 +166,7 @@ export const deleteUser = async (req, res) => {
 
         const found = await User.findById(uid);
 
-         if (!found || !uid) {
+        if (!found || !uid || found.status === false) {
             return res.status(400).json({
                 success: false,
                 message: "user not found"
@@ -173,14 +180,18 @@ export const deleteUser = async (req, res) => {
             });
         }
 
-        if (account.role === 'ADMIN' && found.role === 'ADMIN' && account.uid !== found._id.toString()) {
+        if (account.role === 'ADMINISTRATOR' && found.role === 'ADMINISTRATOR' && account.uid !== found._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "Admins are not allowed to delete other Admins"
             });
         }
 
-        await User.findByIdAndUpdate(uid, { status: false, name: `deleted: ${found.name}` }, { new: true });
+        await User.findByIdAndUpdate(uid, { status: false, 
+            name: `deleted: ${found.name}`,
+            username: `deleted: ${found.username}`,
+            email: `deleted: ${found.email}`,
+            dpi: `deleted: ${found.dpi}`}, { new: true });
 
         return res.status(200).json({
             success: true,
@@ -199,7 +210,7 @@ export const deleteUser = async (req, res) => {
 //Shows the profile of the user logged in
 export const showProfile = async (req, res) => {
     try {
-        const find = req.userJwt.uid;
+        const find = req.userJwt._id;
         const user = await User.findById(find);
 
         if (!user || user.status === false) {
@@ -224,9 +235,9 @@ export const showProfile = async (req, res) => {
 };
 
 //edits the profile of the user logged in
-export const editUserProfile= async (req, res) => {
+export const editUserProfile = async (req, res) => {
     try {
-        const account = req.userJwt.uid;
+        const account = req.userJwt._id;
         const { name, address, job, income } = req.body;
 
         const found = await User.findById(account);
