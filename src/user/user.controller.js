@@ -128,11 +128,13 @@ export const editUser = async (req, res) => {
             });
         }
 
-        if (account.role === 'ADMINISTRATOR' && found.role === 'ADMINISTRATOR' && account.uid !== found._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: "Admins are not allowed to edit other Admins"
-            });
+        if (account.role === 'ADMINISTRATOR' && found.role === 'ADMINISTRATOR') {
+            if (account._id.toString() !== found._id.toString()) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Admins are not allowed to edit other Admins"
+                });
+            }
         }
 
         const newData = {
