@@ -57,7 +57,7 @@ export const editUserValidator = [
     body("name").optional().isString().withMessage("Name must be a valid string"),
     body("address").optional().isString().withMessage("Address must be a valid string"),
     body("job").optional().isString().withMessage("Job information must be a valid string"),
-    body("income").optional().isString().withMessage("Income must be a valid string"),
+    body("income").optional().isNumeric().withMessage("Income must be a valid number"),
     validateFields,
     handleErrors
 ];
@@ -83,7 +83,7 @@ export const editUserProfileValidator = [
     body("name").optional().isString().withMessage("Name must be a valid string"),
     body("address").optional().isString().withMessage("Address must be a valid string"),
     body("job").optional().isString().withMessage("Job information must be a valid string"),
-    body("income").optional().isString().withMessage("Income must be a valid string"),
+    body("income").optional().isNumeric().withMessage("Income must be a valid number"),
     validateFields,
     handleErrors
 ];
