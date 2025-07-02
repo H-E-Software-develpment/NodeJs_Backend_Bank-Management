@@ -9,6 +9,7 @@ import { dbConnection } from './mongo.js';
 import User from "../src/user/user.model.js";
 import authRoutes from "../src/auth/auth.routes.js";
 import userRoutes from "../src/user/user.routes.js";
+import accountRoutes from "../src/account/account.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 
 class ExpressServer {
@@ -69,6 +70,7 @@ class ExpressServer {
         this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
         this.app.use("/bankManagement/v1/auth", authRoutes);
         this.app.use("/bankManagement/v1/user", userRoutes);
+        this.app.use("/bankManagement/v1/account", accountRoutes);
     }
 
     listen() {
