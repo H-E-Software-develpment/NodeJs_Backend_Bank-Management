@@ -90,7 +90,6 @@ export const editUserProfileValidator = [
 
 export const changeUserPasswordValidator = [
     validateJWT,
-    param("uid").isMongoId().withMessage("User ID is invalid").notEmpty().withMessage("User ID is required").custom(findUser),
     body("password").notEmpty().withMessage("Password is required").isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1 }),
     body("confirmation").notEmpty().withMessage("Confirmation is required").isString().withMessage("Confirmation must be a valid string"),
     validateFields,

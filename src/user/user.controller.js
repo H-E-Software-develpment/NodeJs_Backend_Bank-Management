@@ -276,19 +276,19 @@ export const editUserProfile = async (req, res) => {
 // change password for user logged in
 export const changeUserPassword = async (req, res) => {
     try {
-        const { uid } = req.params;
+        const account = req.userJwt._id;
         const { password, confirmation } = req.body;
-        const account = req.userJwt;
 
-        const user = await User.findById(uid);
+        const found = await User.findById(account);
 
-        if (account._id.toString() !== uid) {
-            return res.status(401).json({
+        if (!found) {
+            return res.status(400).json({
                 success: false,
-                message: "not allowed / user not found"
+                message: "user not found"
             });
-        }
-        const checkOldNew = await verify(user.password, password);
+        };
+
+        const checkOldNew = await verify(found.password, password);
         if (checkOldNew) {
             return res.status(400).json({
                 success: false,
@@ -303,10 +303,9 @@ export const changeUserPassword = async (req, res) => {
             });
         }
 
+        const newEncryptedPassword = await hash(password);
 
-        const encryptedPassword = await hash(password);
-
-        await User.findByIdAndUpdate(uid, { password: encryptedPassword }, { new: true });
+        await User.findByIdAndUpdate(uid, { password: newEncryptedPassword }, { new: true });
 
         return res.status(200).json({
             success: true,
