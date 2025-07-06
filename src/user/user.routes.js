@@ -237,7 +237,7 @@ router.put("/editUserProfile", editUserProfileValidator, editUserProfile);
 
 /**
  * @swagger
- * /user/changeUserPassword/{uid}:
+ * /user/changeUserPassword
  *   put:
  *     tags:
  *       - User
@@ -246,13 +246,6 @@ router.put("/editUserProfile", editUserProfileValidator, editUserProfile);
  *     operationId: changeUserPassword
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: uid
- *         required: true
- *         description: ID of the user whose password is being changed.
- *         schema:
- *           type: string
  *     requestBody:
  *       description: New password details.
  *       required: true
@@ -278,7 +271,7 @@ router.put("/editUserProfile", editUserProfileValidator, editUserProfile);
  *       500:
  *         description: Internal server error.
  */
-router.put("/changeUserPassword/:uid", changeUserPasswordValidator, changeUserPassword);
+router.put("/changeUserPassword", changeUserPasswordValidator, changeUserPassword);
 
 export default router;
 
