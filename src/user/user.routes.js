@@ -237,7 +237,7 @@ router.put("/editUserProfile", editUserProfileValidator, editUserProfile);
 
 /**
  * @swagger
- * /user/changeUserPassword
+ * /user/changeUserPassword:
  *   put:
  *     tags:
  *       - User
@@ -271,6 +271,7 @@ router.put("/editUserProfile", editUserProfileValidator, editUserProfile);
  *       500:
  *         description: Internal server error.
  */
+
 router.put("/changeUserPassword", changeUserPasswordValidator, changeUserPassword);
 
 export default router;

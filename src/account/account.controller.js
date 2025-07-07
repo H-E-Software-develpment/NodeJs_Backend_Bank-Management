@@ -21,7 +21,7 @@ export const createClientWithAccount = async (req, res) => {
         const account = await Account.create({ number, type, balance, owner: user._id });
 
         return res.status(201).json({
-            message: "User created succesfully",
+            message: "Client user created succesfully",
             user,
             account
         });
@@ -38,10 +38,10 @@ export const createClientWithAccount = async (req, res) => {
 export const createAccount = async (req, res) => {
     try {
         const log = req.userJwt;
-        const data = req.body;
+        const {owner,...data} = req.body;
 
-        const user = await User.findOne({ dpi: data.owner, role: 'CLIENT', status: true });
-        if (!user || !data.owner) {
+        const user = await User.findOne({ dpi: owner, role: 'CLIENT', status: true });
+        if (!user || !owner) {
             return res.status(400).json({
                 success: false,
                 message: "the user could not be found"
@@ -59,12 +59,12 @@ export const createAccount = async (req, res) => {
         await account.save();
 
         return res.status(201).json({
-            message: "User created succesfully",
+            message: "Bank account created succesfully",
             account
         });
     } catch (err) {
         return res.status(500).json({
-            message: "User creation failed,check the information",
+            message: "Bank account creation failed,check the information",
             error: err.message
         });
     }

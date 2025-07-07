@@ -305,7 +305,7 @@ export const changeUserPassword = async (req, res) => {
 
         const newEncryptedPassword = await hash(password);
 
-        await User.findByIdAndUpdate(uid, { password: newEncryptedPassword }, { new: true });
+        await User.findByIdAndUpdate(account, { password: newEncryptedPassword }, { new: true });
 
         return res.status(200).json({
             success: true,

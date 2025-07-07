@@ -9,8 +9,8 @@ const accountSchema = Schema({
     },
     type: {
         type: String,
-        enum: ["CHEKING", "SAVINGS"],
-        default: "CHEKING"
+        enum: ["CHECKING", "SAVINGS"],
+        default: "CHECKING"
     },
     balance: {
         type: Number,
