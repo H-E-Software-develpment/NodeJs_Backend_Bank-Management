@@ -189,11 +189,13 @@ export const deleteUser = async (req, res) => {
             });
         }
 
+        const tag = Math.floor(Math.random() * 10) + 1;
+
         await User.findByIdAndUpdate(uid, { status: false, 
-            name: `deleted: ${found.name}`,
-            username: `deleted: ${found.username}`,
-            email: `deleted: ${found.email}`,
-            dpi: `deleted: ${found.dpi}`}, { new: true });
+            name: `deleted${tag}: ${found.name} `,
+            username: `deleted${tag}: ${found.username}`,
+            email: `deleted${tag}: ${found.email}`,
+            dpi: `deleted${tag}: ${found.dpi}`}, { new: true });
 
         return res.status(200).json({
             success: true,

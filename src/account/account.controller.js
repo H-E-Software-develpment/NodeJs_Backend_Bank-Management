@@ -113,10 +113,10 @@ export const closeAccount = async (req, res) => {
 };
 
 // ---------- ALL ROLE ---------- //
-//This methos finds accounts based on their owner DPI and/or account type
-//Shows a list of accounts or a single account based on the filter parameters
+//This methos finds accounts based on their owner DPI and/or account type, but also can show a individual information for account (aid), works for Wrokers and administrators
+//Shows a list of accounts or a single account complete information based on the filter parameters
 //this returns all accounts infromation and user/owner of the accounts data also
-// for clients it shows all the individual information by account he choses(aid)
+// for clients it shows all his accounts (log), all the individual information by account he choses(aid) or list by type of account (type)
 export const findAccounts = async (req, res) => {
     try {
         const log = req.userJwt;
@@ -129,6 +129,7 @@ export const findAccounts = async (req, res) => {
 
         if (log.role === 'CLIENT') {
             filterParameter.owner = log._id;
+            user = log;
         }
         if (owner) {
             user = await User.findOne({ dpi: owner, role: 'CLIENT', status: true });
@@ -158,11 +159,11 @@ export const findAccounts = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             success: false,
-            message: "Failed to find the Users you sought",
+            message: "Failed to find the accounts you sought",
             error: err.message
         });
     }
-}; ``
+}; 
 
 // ---------- CLIENT ROLE ---------- //
 // Shows all active accounts owned by the client loged in
@@ -182,7 +183,7 @@ export const getAccountsForClient = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "user bankaccounts got successfully",
+            message: "user bank accounts got successfully",
             total,
             account
         });
