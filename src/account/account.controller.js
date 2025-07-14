@@ -226,14 +226,14 @@ export const addFavoriteAccount = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: 'Profile changes updated succesfully',
+            message: 'Account addead as favorite succesfully',
             user,
             account
         });
     } catch (err) {
         res.status(500).json({
             success: false,
-            msg: 'failed to update profile changes',
+            msg: 'failed to add this account to favorites',
             error: err.message
         });
     }
