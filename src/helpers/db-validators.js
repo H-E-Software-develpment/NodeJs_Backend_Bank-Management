@@ -1,5 +1,6 @@
 import User from "../user/user.model.js";
 import Account from "../account/account.model.js";
+import Product from "../product/product.model.js";
 
 export const findUser = async (uid = " ") => {
     const user = await User.findById(uid);
@@ -53,5 +54,18 @@ export const validNumber = async () => {
         const number = Math.floor(1000000000 + Math.random() * 9000000000).toString();
         const exists = await Account.exists({ number });
         if (!exists) return number;
+    }
+};
+
+export const findProduct = async (pid = " ") => {
+    const product = await Product.findById(pid);
+    if (!product) {
+        throw new Error(`The product provided couldn't be found or doesn't exist`);
+    }
+};
+
+export const validProductCategory = async (category = " ") => {
+    if (category !== "FOOD" && category !== "BEAUTY" && category !== "ENTERTAINMENT" && category !== "OTHER") {
+        throw new Error(`Unvalid product category`);
     }
 };

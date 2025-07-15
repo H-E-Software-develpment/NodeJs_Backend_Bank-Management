@@ -33,6 +33,8 @@ const options = {
         "./src/auth/auth.routes.js", 
         "./src/user/user.routes.js",
         "./src/account/account.routes.js",
+        "./src/product/product.routes.js",
+        "./src/movement/movement.routes.js"
     ],
 };
 
