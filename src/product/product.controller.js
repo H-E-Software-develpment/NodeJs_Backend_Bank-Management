@@ -1,5 +1,4 @@
-import Product from "./account.model.js";
-
+import Product from "./product.model.js";
 
 // ---------- ADMINISTRATOR ROLE ---------- //
 export const createProduct = async (req, res) => {
@@ -36,7 +35,7 @@ export const editProduct = async (req, res) => {
             });
         };
 
-        const product = await User.findByIdAndUpdate(pid, newData, { new: true }); 
+        const product = await Product.findByIdAndUpdate(pid, newData, { new: true }); 
 
         res.status(200).json({
             success: true,
