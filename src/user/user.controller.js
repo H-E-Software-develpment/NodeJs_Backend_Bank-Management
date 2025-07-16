@@ -1,4 +1,5 @@
 import User from "./user.model.js";
+import {deleteManyAccounts} from "../helpers/deleteAccounts.js"
 import { hash, verify } from "argon2";
 
 
@@ -187,6 +188,10 @@ export const deleteUser = async (req, res) => {
                 success: false,
                 message: "Admins are not allowed to delete other Admins"
             });
+        }
+
+        if (found.role === 'CLIENT') {
+            await deleteManyAccounts(found);
         }
 
         const tag = Math.floor(Math.random() * 10) + 1;
