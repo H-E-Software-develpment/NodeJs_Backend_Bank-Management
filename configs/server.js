@@ -11,6 +11,7 @@ import authRoutes from "../src/auth/auth.routes.js";
 import userRoutes from "../src/user/user.routes.js";
 import accountRoutes from "../src/account/account.routes.js";
 import productRoutes from "../src/product/product.routes.js";
+import movementRoutes from "../src/movement/movement.routes.js";
 import { swaggerDocs, swaggerUi } from "./swagger.js";
 
 class ExpressServer {
@@ -73,6 +74,7 @@ class ExpressServer {
         this.app.use("/bankManagement/v1/user", userRoutes);
         this.app.use("/bankManagement/v1/account", accountRoutes);
         this.app.use("/bankManagement/v1/product", productRoutes);
+        this.app.use("/bankManagement/v1/movement", movementRoutes);
     }
 
     listen() {

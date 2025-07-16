@@ -1,6 +1,7 @@
 import User from "../user/user.model.js";
 import Account from "../account/account.model.js";
 import Product from "../product/product.model.js";
+import Movement from "../movement/movement.model.js";
 
 export const findUser = async (uid = " ") => {
     const user = await User.findById(uid);
@@ -67,5 +68,17 @@ export const findProduct = async (pid = " ") => {
 export const validProductCategory = async (category = " ") => {
     if (category !== "FOOD" && category !== "BEAUTY" && category !== "ENTERTAINMENT" && category !== "OTHER") {
         throw new Error(`Unvalid product category`);
+    }
+};
+
+export const validMovementType = async (type = " ") => {
+    if (type !== "DEPOSIT" && type !== "WITHDRAWAL" && type !== "TRANSFER") {
+        throw new Error(`Unvalid movement type`); 
+    }
+};
+
+export const validMovementOrder = async (order = " ") => {
+    if (order !== "MORE" && order !== "LESS") {
+        throw new Error(`Unvalid movement order`); 
     }
 };
