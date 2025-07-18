@@ -1,6 +1,7 @@
 import User from "../user/user.model.js";
 import Account from "./account.model.js";
 import { validNumber } from "../helpers/db-validators.js";
+import { convertBalance } from '../helpers/currencyConverter.js';
 import { hash, verify } from "argon2";
 
 
@@ -38,7 +39,7 @@ export const createClientWithAccount = async (req, res) => {
 export const createAccount = async (req, res) => {
     try {
         const log = req.userJwt;
-        const {owner,...data} = req.body;
+        const { owner, ...data } = req.body;
 
         const user = await User.findOne({ dpi: owner, role: 'CLIENT', status: true });
         if (!user || !owner) {
@@ -120,9 +121,9 @@ export const closeAccount = async (req, res) => {
 export const findAccounts = async (req, res) => {
     try {
         const log = req.userJwt;
-        const { limit = 5, from = 0 } = req.query;
+        const { limit = 5, from = 0,currency = 'GTQ' } = req.query;
         const query = { status: true };
-        const { aid, owner, type, } = req.body;
+        const { aid, owner, type } = req.body;
 
         let filterParameter = { ...query };
         let user = null;
@@ -148,6 +149,22 @@ export const findAccounts = async (req, res) => {
 
         const total = await Account.countDocuments(filterParameter);
 
+        if (aid && account.length === 1 && currency !== 'GTQ') {
+            const acc = account[0];
+            try {
+                const converted = await convertBalance(acc.balance, 'GTQ', currency);
+                acc.balance = converted;
+                acc.currency = currency; // Opcional, para que el frontend sepa en qué moneda está
+            } catch (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: "No se pudo convertir el saldo de la cuenta",
+                    error: err.message
+                });
+            }
+        }
+
+
         return res.status(200).json({
             success: true,
             message: "Client accounts found successfully",
@@ -163,7 +180,7 @@ export const findAccounts = async (req, res) => {
             error: err.message
         });
     }
-}; 
+};
 
 // ---------- CLIENT ROLE ---------- //
 // Shows all active accounts owned by the client loged in

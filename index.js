@@ -1,7 +1,6 @@
-import { config } from "dotenv";
-import ExpressServer from "./configs/server.js";
+import './configs/env.js'; // ⚠️ Se ejecuta primero y carga el .env correctamente
 
-config();
+import ExpressServer from './configs/server.js';
 
 const server = new ExpressServer();
 server.listen();
