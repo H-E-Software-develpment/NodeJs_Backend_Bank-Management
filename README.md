@@ -12,8 +12,11 @@ y dinámica de usuarios, cuentas, movimientos financieros, y servicios exclusivo
 ## 🌐 URL API WEB>
  - 🔍 https://react-frontend-bank-management.web.app/
 
- ## 📘 Manual de usuario ( PDF - public/doc/):
-[📄 Ver Manual de Usuario (PDF)]()
+## 📘 Documentos del Proyecto (PDF)
+
+- [📄 Planificacion Principal previa](./public/doc/PLANIFICACIÓN%20API%20WEB%20BANCO%20HE.pdf)
+- [🛠️ Planificacion posterior](./public/doc/planificacion%20banco.pdf)
+- [⚙️ Reporte Final](./public/doc/Reporte%20final%20API%20Web%20Banco.pdf)
 
 ## 💡Por: H.E - Software Development
  ### 🪪 Anthony Josue Escobar Ponce  
