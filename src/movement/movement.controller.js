@@ -206,6 +206,7 @@ export const getAccountsByMovements = async (req, res) => {
                 }
             },
             { $unwind: "$owner" },
+            { $match: { "owner.status": true } },
             {
                 $project: {
                     number: "$account.number",
